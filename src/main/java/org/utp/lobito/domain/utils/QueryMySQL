@@ -1,0 +1,57 @@
+
+# Base de datos para un sistema de agencia de viajes
+# Crear una base de datos para un sistema de agencia de viajes que permita almacenar la información de los empleados, clientes, reservas y destinos de viaje. La base de datos debe contener las siguientes tablas:
+----- AHORA SOLO TENGO EL LOGIN CREADO Y FUNCIONAL ------
+
+
+# Tabla 'tipo_empleado' para almacenar los diferentes tipos de empleados (jefe, administrador, agente de viaje).
+# Tabla 'persona' para almacenar la información personal de los usuarios (nombre, apellido, dirección, teléfono, documento de identidad).
+# Tabla 'usuario' para almacenar la información de inicio de sesión y el tipo de empleado (correo, contraseña, tipo de empleado, hora de inicio de sesión, hora de fin de sesión).
+# Tabla 'cliente' para almacenar la información de los clientes (nombre, apellido, dirección, teléfono, documento de identidad).
+# Tabla 'reserva' para almacenar la información de las reservas de viaje (fecha de reserva, fecha de inicio de viaje, fecha de fin de viaje, destino, cliente, agente de viaje).
+# Tabla 'destino' para almacenar la información de los destinos de viaje (nombre, descripción, precio).
+
+
+
+-- Tabla 'tipo_empleado' para almacenar los diferentes tipos de empleados
+CREATE TABLE tipo_empleado (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo VARCHAR(50) NOT NULL
+);
+
+-- Tabla 'persona' para almacenar la información personal de los usuarios
+CREATE TABLE persona (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    direccion VARCHAR(100),
+    telefono VARCHAR(20),
+    documento_identidad VARCHAR(20)
+);
+
+-- Tabla 'usuario' para almacenar la información de inicio de sesión y el tipo de empleado
+CREATE TABLE usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_persona INT NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    contraseña VARCHAR(100) NOT NULL,
+    id_tipo_empleado INT,
+    hora_inicio DATETIME,
+    hora_fin DATETIME,
+    FOREIGN KEY (id_persona) REFERENCES persona(id),
+    FOREIGN KEY (id_tipo_empleado) REFERENCES tipo_empleado(id)
+);
+
+-- Agregar tipos de empleados a la tabla 'tipo_empleado'
+INSERT INTO tipo_empleado (tipo) VALUES ('Jefe');
+INSERT INTO tipo_empleado (tipo) VALUES ('Administrador');
+INSERT INTO tipo_empleado (tipo) VALUES ('Agente de Viaje');
+
+INSERT INTO persona (nombre, apellido) VALUES ('Juan', 'Pérez');
+SELECT LAST_INSERT_ID() INTO @id_persona;
+INSERT INTO usuario (id_persona, correo, contraseña, id_tipo_empleado)
+VALUES (@id_persona, 'lobito', '123', (SELECT id FROM tipo_empleado WHERE tipo = 'Jefe'));
+
+select * from usuario;
+select * from persona;
+select * from tipo_empleado;
