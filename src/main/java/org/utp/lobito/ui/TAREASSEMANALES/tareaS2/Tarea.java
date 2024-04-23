@@ -1,4 +1,4 @@
-package org.utp.lobito.ui.tareaS2;
+package org.utp.lobito.ui.TAREASSEMANALES.tareaS2;
 
 import java.util.Random;
 import java.util.Scanner;

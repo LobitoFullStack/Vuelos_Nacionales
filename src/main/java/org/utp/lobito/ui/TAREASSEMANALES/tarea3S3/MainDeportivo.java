@@ -1,4 +1,4 @@
-package org.utp.lobito.ui.tarea3S3;
+package org.utp.lobito.ui.TAREASSEMANALES.tarea3S3;
 
 public class MainDeportivo {
 

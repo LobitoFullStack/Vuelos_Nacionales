@@ -1,4 +1,4 @@
-package org.utp.lobito.ui.tarea3s;
+package org.utp.lobito.ui.TAREASSEMANALES.tarea3s;
 
 class Desarrollador {
     private int horasDesarrollo;

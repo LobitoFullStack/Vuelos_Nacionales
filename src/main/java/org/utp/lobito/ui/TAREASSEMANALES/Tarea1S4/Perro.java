@@ -1,4 +1,4 @@
-package org.utp.lobito.ui.Tarea1S4;
+package org.utp.lobito.ui.TAREASSEMANALES.Tarea1S4;
 
 public class Perro extends Mascota {
     private int kmRecorridos;

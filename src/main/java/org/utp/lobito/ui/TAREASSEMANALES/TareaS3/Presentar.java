@@ -1,4 +1,4 @@
-package org.utp.lobito.ui.TareaS3;
+package org.utp.lobito.ui.TAREASSEMANALES.TareaS3;
 import java.util.Scanner;
 
 public class Presentar {
