@@ -4,6 +4,7 @@ package org.utp.lobito.ui.Login;
 
 import org.utp.lobito.di.module.DatabaseConnection;
 import org.utp.lobito.domain.dto.User;
+import org.utp.lobito.ui.Menu.MenuForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +27,7 @@ public class LoginForm extends JDialog {
         super(parent);
         setTitle("Login");
         this.setContentPane(loginPanel);
-        setMinimumSize(new Dimension(450,474));
+        setMinimumSize(new Dimension(550,474));
         this.setModal(true);
         this.setLocationRelativeTo(parent);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -46,6 +47,12 @@ public class LoginForm extends JDialog {
                 user = getAuthentication(email, password);
                 if (user != null) {
                     JOptionPane.showMessageDialog(null, "Bienvenido " + user.getNombre());
+                    // Cerrar la ventana actual
+                    dispose(); // Cerrar la instancia actual de LoginForm
+
+                    // Abrir la ventana del menú y pasar el usuario
+                    MenuForm menuForm = new MenuForm(null, user); // Puedes pasar "null" si no necesitas un JFrame padre
+                    menuForm.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
                 }
@@ -53,10 +60,8 @@ public class LoginForm extends JDialog {
         });
     }
 
-
-
     private User getAuthentication(String email, String password) {
-        if (!isValidEmail(email)) {
+        if (!isValidEmail(email)) {  //este regex valida que tenga el formato de un correo lobito@lobito.com
             JOptionPane.showMessageDialog(null, "Valide que sea un correo Valido");
             return null;
         }
@@ -64,34 +69,21 @@ public class LoginForm extends JDialog {
         User user = null;
         Connection conn = null;
 
-
-
         try {
             conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT u.id, u.id_persona, p.nombre, p.apellido,p.documento_identidad, e.tipo FROM usuario u INNER JOIN persona p INNER JOIN tipo_empleado e ON u.id_persona = p.id WHERE u.correo = ? AND u.contraseña = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT u.id_persona, u.id, p.nombre, p.apellido, p.direccion, p.telefono, p.documento_identidad, tp.tipo_empleado FROM usuario u INNER JOIN persona p ON u.id_persona = p.id INNER JOIN tipo_empleado tp ON u.cod_tipo_empleado = tp.cod_tipo_empleado WHERE u.correo = ? AND u.contraseña = ?");
             stmt.setString(1, email);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                if (rs.next()) {
-                    user = new User();
-                    user.setId(rs.getInt("id")); // Aquí utilizamos el alias "id_usuario" que asignamos en la consulta SQL
-                    user.setIdPersona(rs.getInt("id_persona"));
-                    user.setNombre(rs.getString("nombre"));
-                    user.setApellido(rs.getString("apellido"));
-                    user.setRolTrabajador(rs.getString("tipo")); // Usamos el alias "tipo_empleado"
-                    user.setDocumentoIdentidad(rs.getString("documento_identidad")); // Usamos el nombre de columna directamente
-                }
-
-                // Obtener la hora de inicio de sesión actual
-                LocalDateTime horaInicioSesion = LocalDateTime.now();
-
-                // Insertar la hora de inicio de sesión en la tabla usuario
-                PreparedStatement updateStmt = conn.prepareStatement("UPDATE usuario SET hora_inicio = ? WHERE id = ?");
-                updateStmt.setTimestamp(1, Timestamp.valueOf(horaInicioSesion));
-                updateStmt.setInt(2, user.getId());
-                updateStmt.executeUpdate();
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setIdPersona(rs.getInt("id_persona"));
+                user.setNombre(rs.getString("nombre"));
+                user.setApellido(rs.getString("apellido"));
+                user.setRolTrabajador(rs.getString("tipo_empleado"));
+                user.setDocumentoIdentidad(rs.getString("documento_identidad"));
             } else {
                 System.out.println("Inicio de sesión fallido. Correo electrónico o contraseña incorrectos.");
             }
@@ -101,7 +93,6 @@ public class LoginForm extends JDialog {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return user;
     }
 
@@ -109,6 +100,7 @@ public class LoginForm extends JDialog {
         LoginForm loginForm = new LoginForm(null);
         User user = loginForm.user;
     }
+
 
 
 }

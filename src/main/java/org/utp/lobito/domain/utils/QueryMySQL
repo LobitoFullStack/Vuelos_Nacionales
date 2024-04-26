@@ -15,7 +15,7 @@
 
 -- Tabla 'tipo_empleado' para almacenar los diferentes tipos de empleados
 CREATE TABLE tipo_empleado (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    cod_tipo_empleado INT PRIMARY KEY,
     tipo VARCHAR(50) NOT NULL
 );
 
@@ -35,11 +35,11 @@ CREATE TABLE usuario (
     id_persona INT NOT NULL,
     correo VARCHAR(100) NOT NULL,
     contraseña VARCHAR(100) NOT NULL,
-    id_tipo_empleado INT,
+    cod_tipo_empleado INT,
     hora_inicio DATETIME,
     hora_fin DATETIME,
     FOREIGN KEY (id_persona) REFERENCES persona(id),
-    FOREIGN KEY (id_tipo_empleado) REFERENCES tipo_empleado(id)
+    FOREIGN KEY (id_tipo_empleado) REFERENCES tipo_empleado(cod_tipo_empleado)
 );
 
 -- Agregar tipos de empleados a la tabla 'tipo_empleado'
@@ -49,8 +49,10 @@ INSERT INTO tipo_empleado (tipo) VALUES ('Agente de Viaje');
 
 INSERT INTO persona (nombre, apellido) VALUES ('Juan', 'Pérez');
 SELECT LAST_INSERT_ID() INTO @id_persona;
+
 INSERT INTO usuario (id_persona, correo, contraseña, id_tipo_empleado)
-VALUES (@id_persona, 'lobito', '123', (SELECT id FROM tipo_empleado WHERE tipo = 'Jefe'));
+VALUES (@id_persona, 'lobito@lobito', '123', (SELECT id FROM tipo_empleado WHERE tipo = 'Jefe'));
+
 
 select * from usuario;
 select * from persona;

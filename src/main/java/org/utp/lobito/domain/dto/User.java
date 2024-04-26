@@ -44,9 +44,10 @@ public class User {
         this.apellido = apellido;
     }
 
-    public String getDocumentoIdentidad(String documentoIdentidad) {
-        return this.documentoIdentidad;
+    public String getDocumentoIdentidad() {
+        return documentoIdentidad;
     }
+
 
     public void setDocumentoIdentidad(String documentoIdentidad) {
         this.documentoIdentidad = documentoIdentidad;
