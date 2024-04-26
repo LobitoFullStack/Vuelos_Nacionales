@@ -13,10 +13,11 @@
 
 
 
+
 -- Tabla 'tipo_empleado' para almacenar los diferentes tipos de empleados
 CREATE TABLE tipo_empleado (
     cod_tipo_empleado INT PRIMARY KEY,
-    tipo VARCHAR(50) NOT NULL
+    tipo_empleado VARCHAR(50) NOT NULL
 );
 
 -- Tabla 'persona' para almacenar la información personal de los usuarios
@@ -26,7 +27,7 @@ CREATE TABLE persona (
     apellido VARCHAR(50) NOT NULL,
     direccion VARCHAR(100),
     telefono VARCHAR(20),
-    documento_identidad VARCHAR(20)
+	documento_identidad VARCHAR(20) UNIQUE NOT NULL  -- UNIQUE aquí
 );
 
 -- Tabla 'usuario' para almacenar la información de inicio de sesión y el tipo de empleado
@@ -36,24 +37,33 @@ CREATE TABLE usuario (
     correo VARCHAR(100) NOT NULL,
     contraseña VARCHAR(100) NOT NULL,
     cod_tipo_empleado INT,
-    hora_inicio DATETIME,
-    hora_fin DATETIME,
     FOREIGN KEY (id_persona) REFERENCES persona(id),
-    FOREIGN KEY (id_tipo_empleado) REFERENCES tipo_empleado(cod_tipo_empleado)
+    FOREIGN KEY (cod_tipo_empleado) REFERENCES tipo_empleado(cod_tipo_empleado)
 );
 
--- Agregar tipos de empleados a la tabla 'tipo_empleado'
-INSERT INTO tipo_empleado (tipo) VALUES ('Jefe');
-INSERT INTO tipo_empleado (tipo) VALUES ('Administrador');
-INSERT INTO tipo_empleado (tipo) VALUES ('Agente de Viaje');
+-- Insertar tipos de empleados a la tabla 'tipo_empleado'
+INSERT INTO tipo_empleado (cod_tipo_empleado, tipo_empleado) VALUES (1, 'Jefe');
+INSERT INTO tipo_empleado (cod_tipo_empleado, tipo_empleado) VALUES (2, 'Administrador');
+INSERT INTO tipo_empleado (cod_tipo_empleado, tipo_empleado) VALUES (3, 'Agente de Viaje');
 
-INSERT INTO persona (nombre, apellido) VALUES ('Juan', 'Pérez');
+-- Insertar una nueva persona
+INSERT INTO persona (nombre, apellido, direccion, telefono,documento_identidad) VALUES ('Lobi', 'lobitos', 'SMP', '4444444', '10701122');
 SELECT LAST_INSERT_ID() INTO @id_persona;
 
-INSERT INTO usuario (id_persona, correo, contraseña, id_tipo_empleado)
-VALUES (@id_persona, 'lobito@lobito', '123', (SELECT id FROM tipo_empleado WHERE tipo = 'Jefe'));
+-- Supongamos que el id_persona obtenido es 1 (asignado a Lobito)
 
+-- Ahora, puedes insertar el nuevo usuario en la tabla usuario
+INSERT INTO usuario (id_persona, correo, contraseña, cod_tipo_empleado)
+VALUES (@id_persona, 'lobito@lobito.com', '123', 1);
 
 select * from usuario;
 select * from persona;
 select * from tipo_empleado;
+
+
+SELECT u.id_persona, u.id, p.nombre, p.apellido, p.direccion, p.telefono, p.documento_identidad, tp.tipo_empleado
+FROM usuario u
+INNER JOIN persona p ON u.id_persona = p.id
+INNER JOIN tipo_empleado tp ON u.cod_tipo_empleado = tp.cod_tipo_empleado
+WHERE u.correo = 'lobito' AND u.contraseña = '123';
+
