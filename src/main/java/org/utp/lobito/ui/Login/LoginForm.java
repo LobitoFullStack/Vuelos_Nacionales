@@ -3,7 +3,7 @@ package org.utp.lobito.ui.Login;
 
 
 import org.utp.lobito.di.module.DatabaseConnection;
-import org.utp.lobito.domain.dto.User;
+import org.utp.lobito.domain.dto.UserDTO;
 import org.utp.lobito.ui.Menu.MenuForm;
 
 import javax.swing.*;
@@ -11,7 +11,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.time.LocalDateTime;
 
 import static org.utp.lobito.domain.utils.Utils.isValidEmail;
 
@@ -21,7 +20,7 @@ public class LoginForm extends JDialog {
     private JPasswordField txtpassword;
     private JButton btnSession;
     private JPanel loginPanel;
-    public User user;
+    public UserDTO userDTO;
 
     public LoginForm(JFrame parent) {
         super(parent);
@@ -41,17 +40,22 @@ public class LoginForm extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 String email = txtEmail.getText();
                 String password = txtpassword.getText();
+
+                if (!isValidEmail(email)) {  //este regex valida que tenga el formato de un correo lobito@lobito.com
+                    JOptionPane.showMessageDialog(null, "Valide que sea un correo Valido");
+                    return;
+                }
                 System.out.println("Inicio de sesión con correo electrónico: " + email + " y contraseña: " + password + ".");
 
 
-                user = getAuthentication(email, password);
-                if (user != null) {
-                    JOptionPane.showMessageDialog(null, "Bienvenido " + user.getNombre());
+                userDTO = getAuthentication(email, password);
+                if (userDTO != null) {
+                    JOptionPane.showMessageDialog(null, "Bienvenido " + userDTO.getNombre());
                     // Cerrar la ventana actual
                     dispose(); // Cerrar la instancia actual de LoginForm
 
                     // Abrir la ventana del menú y pasar el usuario
-                    MenuForm menuForm = new MenuForm(null, user); // Puedes pasar "null" si no necesitas un JFrame padre
+                    MenuForm menuForm = new MenuForm(null, userDTO); // Puedes pasar "null" si no necesitas un JFrame padre
                     menuForm.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
@@ -60,13 +64,10 @@ public class LoginForm extends JDialog {
         });
     }
 
-    private User getAuthentication(String email, String password) {
-        if (!isValidEmail(email)) {  //este regex valida que tenga el formato de un correo lobito@lobito.com
-            JOptionPane.showMessageDialog(null, "Valide que sea un correo Valido");
-            return null;
-        }
+    private UserDTO getAuthentication(String email, String password) {
 
-        User user = null;
+
+        UserDTO userDTO = null;
         Connection conn = null;
 
         try {
@@ -77,13 +78,13 @@ public class LoginForm extends JDialog {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                user = new User();
-                user.setId(rs.getInt("id_usuario"));
-                user.setIdPersona(rs.getInt("id_persona"));
-                user.setNombre(rs.getString("nombre"));
-                user.setApellido(rs.getString("apellido"));
-                user.setRolTrabajador(rs.getString("tipo_empleado"));
-                user.setDocumentoIdentidad(rs.getString("documento_identidad"));
+                userDTO = new UserDTO();
+                userDTO.setId(rs.getInt("id_usuario"));
+                userDTO.setIdPersona(rs.getInt("id_persona"));
+                userDTO.setNombre(rs.getString("nombre"));
+                userDTO.setApellido(rs.getString("apellido"));
+                userDTO.setRolTrabajador(rs.getString("tipo_empleado"));
+                userDTO.setDocumentoIdentidad(rs.getString("documento_identidad"));
             } else {
                 System.out.println("Inicio de sesión fallido. Correo electrónico o contraseña incorrectos.");
             }
@@ -93,12 +94,12 @@ public class LoginForm extends JDialog {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user;
+        return userDTO;
     }
 
     public static void main(String[] args) {
         LoginForm loginForm = new LoginForm(null);
-        User user = loginForm.user;
+        UserDTO userDTO = loginForm.userDTO;
     }
 
 

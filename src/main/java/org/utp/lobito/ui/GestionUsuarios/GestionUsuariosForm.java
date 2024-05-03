@@ -1,30 +1,26 @@
-package org.utp.lobito.ui.Menu;
+package org.utp.lobito.ui.GestionUsuarios;
 
 import org.utp.lobito.domain.dto.UserDTO;
-import org.utp.lobito.ui.Agregar.AgregarForm;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class MenuForm extends JDialog {
+public class GestionUsuariosForm  extends JDialog {
     private UserDTO userDTO;
+    private JPanel gestionPanel;
+    private JButton AGREGARButton;
+    private JButton EDITARButton1;
+    private JButton FILTROSDEBUSQUEDAButton;
+    private JButton ELIMINARButton;
 
 
-    private JPanel menuPanel;
-    private JButton panelDeVuelosButton;
-    private JButton vuelosReservadosButton;
-    private JButton gestionDeUsuariosButton;
-    private JLabel lblName;
-    private JLabel lblOperario;
-
-
-    public MenuForm(JFrame parent, UserDTO userDTO) { // Modificar el constructor
+    public GestionUsuariosForm(JFrame parent, UserDTO userDTO) { // Modificar el constructor
         super(parent);
         this.userDTO = userDTO; // Asignar el usuario recibido al campo de clase
         setTitle("Menu Principal");
-        this.setContentPane(menuPanel);
+        this.setContentPane(gestionPanel);
         setMinimumSize(new Dimension(450,474));
         this.setModal(true);
         this.setLocationRelativeTo(parent);
@@ -39,10 +35,12 @@ public class MenuForm extends JDialog {
         });
         this.setVisible(true);
     }
+    private void init() {
+//        lblName.setText(user.getNombre() + " " + user.getApellido());
+//        lblOperario.setText(user.getRolTrabajador());
+    }
+    private void onClick(){
 
-    public void init() {
-        lblName.setText(userDTO.getNombre() + " " + userDTO.getApellido());
-        lblOperario.setText(userDTO.getRolTrabajador());
     }
 
     private void imprimirInformacionUsuarioTest() {
@@ -59,19 +57,5 @@ public class MenuForm extends JDialog {
     }
 
 
-    public void onClick(){
-        gestionDeUsuariosButton.addActionListener(e -> {
-            dispose(); // Cerrar la instancia actual de MenuForm
-            AgregarForm agregarForm = new AgregarForm(null); // Puedes pasar "null" si no necesitas un JFrame padre
-            agregarForm.setVisible(true);
-        });
 
-        panelDeVuelosButton.addActionListener(e -> {
-            System.out.println("Botón 2");
-        });
-
-        vuelosReservadosButton.addActionListener(e -> {
-            System.out.println("Botón 3");
-        });
-    }
 }

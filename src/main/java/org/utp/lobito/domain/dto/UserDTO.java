@@ -1,6 +1,6 @@
 package org.utp.lobito.domain.dto;
 
-public class User {
+public class UserDTO {
     private int id;
     private int idPersona;
     private String nombre;
@@ -9,7 +9,7 @@ public class User {
     private String rolTrabajador;
 
     // Constructor vacío
-    public User() {
+    public UserDTO() {
     }
 
     // Getters y setters para cada campo
