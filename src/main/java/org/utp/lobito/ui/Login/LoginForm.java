@@ -71,14 +71,14 @@ public class LoginForm extends JDialog {
 
         try {
             conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT u.id_persona, u.id, p.nombre, p.apellido, p.direccion, p.telefono, p.documento_identidad, tp.tipo_empleado FROM usuario u INNER JOIN persona p ON u.id_persona = p.id INNER JOIN tipo_empleado tp ON u.cod_tipo_empleado = tp.cod_tipo_empleado WHERE u.correo = ? AND u.contraseña = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT u.id_persona, u.id_usuario, p.nombre, p.apellido, p.direccion, p.telefono, p.documento_identidad, tp.tipo_empleado FROM usuario u INNER JOIN persona p ON u.id_persona = p.id_persona INNER JOIN tipo_empleado tp ON u.cod_tipo_empleado = tp.cod_tipo_empleado WHERE u.correo = ? AND u.contraseña = ?");
             stmt.setString(1, email);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getInt("id"));
+                user.setId(rs.getInt("id_usuario"));
                 user.setIdPersona(rs.getInt("id_persona"));
                 user.setNombre(rs.getString("nombre"));
                 user.setApellido(rs.getString("apellido"));
