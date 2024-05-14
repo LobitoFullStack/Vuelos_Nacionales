@@ -1,6 +1,7 @@
 package org.utp.lobito.ui.GestionUsuarios;
 
 import org.utp.lobito.domain.dto.UserDTO;
+import org.utp.lobito.ui.Agregar.AgregarForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.awt.event.WindowEvent;
 public class GestionUsuariosForm  extends JDialog {
     private UserDTO userDTO;
     private JPanel gestionPanel;
-    private JButton AGREGARButton;
+    private JButton btnAgregar;
     private JButton EDITARButton1;
     private JButton FILTROSDEBUSQUEDAButton;
     private JButton ELIMINARButton;
@@ -19,7 +20,7 @@ public class GestionUsuariosForm  extends JDialog {
     public GestionUsuariosForm(JFrame parent, UserDTO userDTO) { // Modificar el constructor
         super(parent);
         this.userDTO = userDTO; // Asignar el usuario recibido al campo de clase
-        setTitle("Menu Principal");
+        setTitle("Gestión de Usuarios");
         this.setContentPane(gestionPanel);
         setMinimumSize(new Dimension(450,474));
         this.setModal(true);
@@ -40,6 +41,13 @@ public class GestionUsuariosForm  extends JDialog {
 //        lblOperario.setText(user.getRolTrabajador());
     }
     private void onClick(){
+    btnAgregar.addActionListener(e -> {
+        dispose(); // Cerrar la instancia actual de MenuForm
+        AgregarForm agregarForm = new AgregarForm(null); // Puedes pasar "null" si no necesitas un JFrame padre
+        agregarForm.setVisible(true);
+    });
+
+
 
     }
 
@@ -57,5 +65,7 @@ public class GestionUsuariosForm  extends JDialog {
     }
 
 
-
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
 }

@@ -2,6 +2,7 @@ package org.utp.lobito.ui.Menu;
 
 import org.utp.lobito.domain.dto.UserDTO;
 import org.utp.lobito.ui.Agregar.AgregarForm;
+import org.utp.lobito.ui.GestionUsuarios.GestionUsuariosForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,8 +63,8 @@ public class MenuForm extends JDialog {
     public void onClick(){
         gestionDeUsuariosButton.addActionListener(e -> {
             dispose(); // Cerrar la instancia actual de MenuForm
-            AgregarForm agregarForm = new AgregarForm(null); // Puedes pasar "null" si no necesitas un JFrame padre
-            agregarForm.setVisible(true);
+            GestionUsuariosForm gestionUsuariosForm = new GestionUsuariosForm(null, userDTO); // Puedes pasar "null" si no necesitas un JFrame padre
+            gestionUsuariosForm.setVisible(true);
         });
 
         panelDeVuelosButton.addActionListener(e -> {

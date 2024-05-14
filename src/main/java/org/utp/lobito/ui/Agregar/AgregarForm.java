@@ -101,6 +101,32 @@ public class AgregarForm extends JDialog {
                 }
             }
         });
+
+        btnAgregarUsuario.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = txtName.getText().trim();
+                String lastName = txtLastName.getText().trim();
+                String correo = txtCorreo.getText().trim();
+                String contraseña = txtContraseña.getText().trim();
+                String validarContraseña = txtValidarContraseña.getText().trim();
+
+                //me falta validar para que agregue a la base de datos el usuario
+                JOptionPane.showMessageDialog(null, "Persona agregada exitosamente!");
+//                // Validar datos antes de intentar agregar a la base de datos
+//                if (validarDatosUsuario(name, lastName, correo, contraseña, validarContraseña)) {
+//                    UserDTO user = new UserDTO();
+//                    user.setNombre(name);
+//                    user.setApellido(lastName);
+//                    user.setCorreo(correo);
+//                    user.setContraseña(contraseña);
+//                    user.setRolTrabajador(rolTrabajador);
+//
+//                    agregarUsuario(user);
+//                }
+
+            }
+        });
     }
 
     private void agregarPersona(PersonaDTO persona) {
